@@ -1,6 +1,8 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
+  "type": "module",
+  "bin": { "gendiff": "bin/gendiff.js" },
   "description": "gendiff utilite",
   "main": "index.js",
   "scripts": {
