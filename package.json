@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DomnitskiyOleg/frontend-project-46/issues"
   },
-  "homepage": "https://github.com/DomnitskiyOleg/frontend-project-46#readme"
+  "homepage": "https://github.com/DomnitskiyOleg/frontend-project-46#readme",
+  "dependencies": {
+    "commander": "^10.0.0"
+  }
 }
