@@ -2,8 +2,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import _ from 'lodash';
 
-const getDataFromFile = (pathToFile) =>
-  JSON.parse(readFileSync(path.resolve(pathToFile)));
+const getDataFromFile = (pathToFile) => JSON.parse(readFileSync(path.resolve(pathToFile)));
 
 const compareJson = (path1, path2) => {
   const data1 = getDataFromFile(path1);
