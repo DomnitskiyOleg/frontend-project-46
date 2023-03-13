@@ -7,7 +7,3 @@ const gendiff = (pathToFile1, pathToFile2) => {
  return compareJson(pathToFile1, pathToFile2);
 };
 export default gendiff;
-
-export const outPutDiff = (pathToFile1, pathToFile2) => {
-  console.log(gendiff(pathToFile1, pathToFile2));
-}
