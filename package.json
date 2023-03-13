@@ -2,7 +2,9 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "type": "module",
-  "bin": { "gendiff": "bin/gendiff.js" },
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
   "description": "gendiff utilite",
   "main": "index.js",
   "scripts": {
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/DomnitskiyOleg/frontend-project-46#readme",
   "dependencies": {
-    "commander": "^10.0.0"
+    "commander": "^10.0.0",
+    "lodash": "^4.17.21"
   }
 }
