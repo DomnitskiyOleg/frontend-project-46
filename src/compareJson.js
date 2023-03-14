@@ -12,9 +12,6 @@ const compareJson = (path1, path2) => {
     Object.entries(_.cloneDeep(data2)),
   );
   const diffObject = _.sortBy(entriesOfresult).reduce((acc, [key, value]) => {
-    if (Object.hasOwn(acc, key)) {
-      return acc;
-    }
     if (!Object.hasOwn(data2, key)) {
       acc[`- ${key}`] = value;
     } else if (!Object.hasOwn(data1, key)) {
@@ -28,6 +25,6 @@ const compareJson = (path1, path2) => {
     return acc;
   }, {});
 
-  return JSON.stringify(diffObject, null, ' ').replace(/[",]/g, ' ');
+  return JSON.stringify(diffObject, null, '  ').replace(/[",]/g, '');
 };
 export default compareJson;
