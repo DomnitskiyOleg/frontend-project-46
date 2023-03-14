@@ -19,5 +19,5 @@ test('flat JSON', () => {
     '  + verbose: true',
     '}'].join('\n');
   const actual = gendiff(path1, path2);
-  expect(actual).toBe(expected);
+  expect(actual).toEqual(expected);
 });
