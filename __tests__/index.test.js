@@ -13,6 +13,7 @@ test('flat JSON', () => {
     '  - follow: false',
     '    host: hexlet.io',
     '  - proxy: 123.234.53.22',
+    '  + somekey: value',
     '  - timeout: 50',
     '  + timeout: 20',
     '  + verbose: true',
