@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: # список шагов, которые надо выполнить
       - uses: actions/checkout@v3
+      - run: make install
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
