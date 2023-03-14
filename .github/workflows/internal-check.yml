@@ -6,6 +6,8 @@ jobs:
     steps: # список шагов, которые надо выполнить
       - uses: actions/checkout@v3
       - run: make install
+      - run: make test
+      - run: make lint
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
