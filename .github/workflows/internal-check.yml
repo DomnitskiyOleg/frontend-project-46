@@ -3,6 +3,10 @@ on: push
 jobs:
   my-job:
     runs-on: ubuntu-latest
-    steps:
-      - name: my-step
-        run: npm ci
+    steps: # список шагов, которые надо выполнить
+      # экшен, выполняет какую-то задачу
+      # checkout – клонирует репозиторий
+      - uses: actions/checkout@v3
+      # run – произвольная bash-команда
+      # ls -la выведет содержимое текущего репозитория
+      - run: ls -la
