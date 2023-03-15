@@ -1,12 +1,6 @@
-import path from 'path';
-import { readFileSync } from 'fs';
 import _ from 'lodash';
 
-const getDataFromFile = (pathToFile) => JSON.parse(readFileSync(path.resolve(pathToFile)));
-
-const compareJson = (path1, path2) => {
-  const data1 = getDataFromFile(path1);
-  const data2 = getDataFromFile(path2);
+const compare = (data1, data2) => {
   const entriesOfresult = _.concat(
     Object.entries(_.cloneDeep(data1)),
     Object.entries(_.cloneDeep(data2)),
@@ -27,4 +21,4 @@ const compareJson = (path1, path2) => {
 
   return JSON.stringify(diffObject, null, '  ').replace(/[",]/g, '');
 };
-export default compareJson;
+export default compare;
