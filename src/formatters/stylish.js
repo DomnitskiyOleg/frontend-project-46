@@ -1,9 +1,9 @@
 const handleLeaf = (leaf) => {
   const result = {};
   const { name, currentValue, previousValue } = leaf;
-  if (currentValue === undefined) {
+  if (currentValue === 'no value') {
     result[`- ${name}`] = previousValue;
-  } else if (previousValue === undefined) {
+  } else if (previousValue === 'no value') {
     result[`+ ${name}`] = currentValue;
   } else if (currentValue !== previousValue) {
     result[`- ${name}`] = previousValue;

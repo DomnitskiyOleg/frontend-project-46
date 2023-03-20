@@ -10,8 +10,8 @@ const getDiffTree = (data1, data2) => {
     }
     return {
       name: key,
-      currentValue: _.cloneDeep(data2[key]),
-      previousValue: _.cloneDeep(data1[key]),
+      currentValue: _.cloneDeep(_.get(data2, key, 'no value')),
+      previousValue: _.cloneDeep(_.get(data1, key, 'no value')),
     };
   });
   return diffTree;

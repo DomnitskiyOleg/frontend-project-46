@@ -1,0 +1,108 @@
+[
+    {
+      "name": "common",
+      "children": [
+        {
+          "name": "follow",
+          "currentValue": false,
+          "previousValue": "no value"
+        },
+        {
+          "name": "setting1",
+          "currentValue": "Value 1",
+          "previousValue": "Value 1"
+        },
+        {
+          "name": "setting2",
+          "currentValue": "no value",
+          "previousValue": 200
+        },
+        {
+          "name": "setting3",
+          "currentValue": null,
+          "previousValue": true
+        },
+        {
+          "name": "setting4",
+          "currentValue": "blah blah",
+          "previousValue": "no value"
+        },
+        {
+          "name": "setting5",
+          "currentValue": {
+            "key5": "value5"
+          },
+          "previousValue": "no value"
+        },
+        {
+          "name": "setting6",
+          "children": [
+            {
+              "name": "doge",
+              "children": [
+                {
+                  "name": "wow",
+                  "currentValue": "so much",
+                  "previousValue": ""
+                }
+              ]
+            },
+            {
+              "name": "key",
+              "currentValue": "value",
+              "previousValue": "value"
+            },
+            {
+              "name": "ops",
+              "currentValue": "vops",
+              "previousValue": "no value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "group1",
+      "children": [
+        {
+          "name": "baz",
+          "currentValue": "bars",
+          "previousValue": "bas"
+        },
+        {
+          "name": "foo",
+          "currentValue": "bar",
+          "previousValue": "bar"
+        },
+        {
+          "name": "nest",
+          "currentValue": "str",
+          "previousValue": {
+            "key": "value"
+          }
+        }
+      ]
+    },
+    {
+      "name": "group2",
+      "currentValue": "no value",
+      "previousValue": {
+        "abc": 12345,
+        "deep": {
+          "id": 45
+        }
+      }
+    },
+    {
+      "name": "group3",
+      "currentValue": {
+        "deep": {
+          "id": {
+            "number": 45
+          }
+        },
+        "fee": 100500
+      },
+      "previousValue": "no value"
+    }
+]

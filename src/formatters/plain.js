@@ -13,9 +13,9 @@ const handleValue = (value) => {
 const handleLeaf = (leaf, pathToLeaf) => {
   let result;
   const { name, currentValue, previousValue } = leaf;
-  if (currentValue === undefined) {
+  if (currentValue === 'no value') {
     result = `Property '${pathToLeaf}${name}' was removed`;
-  } else if (previousValue === undefined) {
+  } else if (previousValue === 'no value') {
     result = `Property '${pathToLeaf}${name}' was added with value: ${handleValue(
       currentValue,
     )}`;
