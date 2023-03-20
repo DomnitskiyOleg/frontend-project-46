@@ -34,7 +34,8 @@ const getPlainFormat = (diffTree) => {
     if (!node.children) {
       return handleLeaf(node, pathToCurrent);
     }
-    const result = node.children.map((child) => iter(child, `${pathToCurrent}${node.name}.`));
+    const pathToNext = `${pathToCurrent}${node.name}.`;
+    const result = node.children.map((child) => iter(child, pathToNext));
     return result;
   };
   const plainFormat = _.flattenDeep(diffTree.map((item) => iter(item, ''))).join('\n');
