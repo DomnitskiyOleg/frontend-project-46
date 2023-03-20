@@ -31,7 +31,7 @@ const getObjectFromDiffTree = (node) => {
   return result;
 };
 
-const stylish = (diffTree) => {
+const getStylishFormat = (diffTree) => {
   const diffObject = getObjectFromDiffTree(diffTree);
   const formattedDiff = JSON.stringify(diffObject, null, 4)
     .replace(/[",]/g, '')
@@ -45,4 +45,4 @@ const stylish = (diffTree) => {
     .join('\n');
   return formattedDiff;
 };
-export default stylish;
+export default getStylishFormat;

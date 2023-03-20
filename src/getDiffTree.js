@@ -1,14 +1,6 @@
 import _ from 'lodash';
 
-const isDirectory = (value1, value2) => {
-  if (value2 === null || value1 === null) {
-    return false;
-  }
-  if (typeof value1 === 'object' && typeof value2 === 'object') {
-    return true;
-  }
-  return false;
-};
+const isDirectory = (value1, value2) => _.isObject(value1) && _.isObject(value2);
 
 const getDiffTree = (data1, data2) => {
   const keys = _.sortBy(_.union(Object.keys(data1), Object.keys(data2)));
