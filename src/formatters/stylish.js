@@ -1,17 +1,15 @@
 const handleLeaf = (leaf) => {
-  const result = {};
   const { name, currentValue, previousValue } = leaf;
   if (currentValue === 'no value') {
-    result[`- ${name}`] = previousValue;
-  } else if (previousValue === 'no value') {
-    result[`+ ${name}`] = currentValue;
-  } else if (currentValue !== previousValue) {
-    result[`- ${name}`] = previousValue;
-    result[`+ ${name}`] = currentValue;
-  } else {
-    result[`${name}`] = currentValue;
+    return { [`- ${name}`]: previousValue };
   }
-  return result;
+  if (previousValue === 'no value') {
+    return { [`+ ${name}`]: currentValue };
+  }
+  if (currentValue !== previousValue) {
+    return { [`- ${name}`]: previousValue, [`+ ${name}`]: currentValue };
+  }
+  return { [`${name}`]: currentValue };
 };
 
 const isLeaf = (node) => !Array.isArray(node);

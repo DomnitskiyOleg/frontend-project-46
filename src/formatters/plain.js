@@ -11,22 +11,21 @@ const handleValue = (value) => {
 };
 
 const handleLeaf = (leaf, pathToLeaf) => {
-  let result;
   const { name, currentValue, previousValue } = leaf;
   if (currentValue === 'no value') {
-    result = `Property '${pathToLeaf}${name}' was removed`;
-  } else if (previousValue === 'no value') {
-    result = `Property '${pathToLeaf}${name}' was added with value: ${handleValue(
+    return `Property '${pathToLeaf}${name}' was removed`;
+  }
+  if (previousValue === 'no value') {
+    return `Property '${pathToLeaf}${name}' was added with value: ${handleValue(
       currentValue,
     )}`;
-  } else if (currentValue !== previousValue) {
-    result = `Property '${pathToLeaf}${name}' was updated. From ${handleValue(
+  }
+  if (currentValue !== previousValue) {
+    return `Property '${pathToLeaf}${name}' was updated. From ${handleValue(
       previousValue,
     )} to ${handleValue(currentValue)}`;
-  } else {
-    result = [];
   }
-  return result;
+  return [];
 };
 
 const getPlainFormat = (diffTree) => {
@@ -38,7 +37,9 @@ const getPlainFormat = (diffTree) => {
     const result = node.children.map((child) => iter(child, pathToNext));
     return result;
   };
-  const plainFormat = _.flattenDeep(diffTree.map((item) => iter(item, ''))).join('\n');
+  const plainFormat = _.flattenDeep(
+    diffTree.map((item) => iter(item, '')),
+  ).join('\n');
   return plainFormat;
 };
 
