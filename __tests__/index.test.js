@@ -30,3 +30,8 @@ test.each([
   const actual = gendiff(path1, path2, format);
   expect(() => JSON.parse(actual)).not.toThrow();
 });
+test('test(unknown format)', () => {
+  const path1 = getFixturePath('file1.txt');
+  const path2 = getFixturePath('file2.json');
+  expect(() => gendiff(path1, path2)).toThrow();
+});

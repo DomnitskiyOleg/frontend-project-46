@@ -7,7 +7,7 @@ const parseData = (data, format) => {
     case 'yml':
       return yaml.load(data);
     default:
-      return 'Unknown data format';
+      throw new Error('Unknown data format');
   }
 };
 export default parseData;
