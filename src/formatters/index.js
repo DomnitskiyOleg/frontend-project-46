@@ -3,8 +3,13 @@ import getPlainFormat from './plain.js';
 import getJsonFormat from './json.js';
 
 const formatOutput = (diffData, formatName) => {
-  if (formatName === 'plain') return getPlainFormat(diffData);
-  if (formatName === 'json') return getJsonFormat(diffData);
-  return getStylishFormat(diffData);
+  switch (formatName) {
+    case 'plain':
+      return getPlainFormat(diffData);
+    case 'json':
+      return getJsonFormat(diffData);
+    default:
+      return getStylishFormat(diffData);
+  }
 };
 export default formatOutput;

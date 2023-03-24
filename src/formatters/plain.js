@@ -7,23 +7,26 @@ const handleValue = (value) => {
   if (_.isString(value)) {
     return `'${value}'`;
   }
-  return `${value}`;
+  return String(value);
 };
 
 const handleLeaf = (leaf, pathToLeaf) => {
-  const { name, currentValue, previousValue } = leaf;
-  if (currentValue === 'no value') {
-    return `Property '${pathToLeaf}${name}' was removed`;
+  const {
+    name, type, value, value1, value2,
+  } = leaf;
+
+  if (type === 'removed') {
+    return `Property '${pathToLeaf}${name}' was ${type}`;
   }
-  if (previousValue === 'no value') {
-    return `Property '${pathToLeaf}${name}' was added with value: ${handleValue(
-      currentValue,
+  if (type === 'added') {
+    return `Property '${pathToLeaf}${name}' was ${type} with value: ${handleValue(
+      value,
     )}`;
   }
-  if (currentValue !== previousValue) {
-    return `Property '${pathToLeaf}${name}' was updated. From ${handleValue(
-      previousValue,
-    )} to ${handleValue(currentValue)}`;
+  if (type === 'updated') {
+    return `Property '${pathToLeaf}${name}' was ${type}. From ${handleValue(
+      value1,
+    )} to ${handleValue(value2)}`;
   }
   return [];
 };

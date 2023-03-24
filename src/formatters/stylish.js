@@ -1,15 +1,18 @@
 const handleLeaf = (leaf) => {
-  const { name, currentValue, previousValue } = leaf;
-  if (currentValue === 'no value') {
-    return { [`- ${name}`]: previousValue };
+  const {
+    name, type, value, value1, value2,
+  } = leaf;
+
+  if (type === 'removed') {
+    return { [`- ${name}`]: value };
   }
-  if (previousValue === 'no value') {
-    return { [`+ ${name}`]: currentValue };
+  if (type === 'added') {
+    return { [`+ ${name}`]: value };
   }
-  if (currentValue !== previousValue) {
-    return { [`- ${name}`]: previousValue, [`+ ${name}`]: currentValue };
+  if (type === 'updated') {
+    return { [`- ${name}`]: value1, [`+ ${name}`]: value2 };
   }
-  return { [`${name}`]: currentValue };
+  return { [`${name}`]: value };
 };
 
 const isLeaf = (node) => !Array.isArray(node);
@@ -18,6 +21,7 @@ const getObjectFromDiffTree = (node) => {
   if (isLeaf(node)) {
     return handleLeaf(node);
   }
+
   const result = node.reduce((acc, item) => {
     if (item.children) {
       const { name, children } = item;
@@ -31,6 +35,7 @@ const getObjectFromDiffTree = (node) => {
 
 const getStylishFormat = (diffTree) => {
   const diffObject = getObjectFromDiffTree(diffTree);
+
   const formattedDiff = JSON.stringify(diffObject, null, 4)
     .replace(/[",]/g, '')
     .split('\n')
@@ -41,6 +46,7 @@ const getStylishFormat = (diffTree) => {
       return item;
     })
     .join('\n');
+
   return formattedDiff;
 };
 export default getStylishFormat;
