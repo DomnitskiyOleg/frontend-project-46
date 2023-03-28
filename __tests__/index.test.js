@@ -25,7 +25,7 @@ test.each([
 
   expect(actual).toEqual(expected);
   expect(() => JSON.parse(actual1)).not.toThrow();
-  expect(() => gendiff(path1, path2, 'plainn')).toThrow();
+  expect(() => gendiff(path1, path2, 'wrong format')).toThrow();
 });
 
 test('test(unknown format)', () => {

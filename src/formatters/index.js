@@ -11,7 +11,7 @@ const formatOutput = (diffData, formatName = 'stylish') => {
     case 'stylish':
       return getStylishFormat(diffData);
     default:
-      throw new Error(`Unknown output format '${formatName}`);
+      throw new Error(`Unknown output format '${formatName}'`);
   }
 };
 export default formatOutput;
