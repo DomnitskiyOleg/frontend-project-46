@@ -26,10 +26,5 @@ test.each([
   expect(actual).toEqual(expected);
   expect(() => JSON.parse(actual1)).not.toThrow();
   expect(() => gendiff(path1, path2, 'wrong format')).toThrow();
-});
-
-test('test(unknown format)', () => {
-  const path1 = getFixturePath('file1.txt');
-  const path2 = getFixturePath('file2.json');
-  expect(() => gendiff(path1, path2)).toThrow();
+  expect(() => gendiff('file.wrong', path2)).toThrow();
 });
