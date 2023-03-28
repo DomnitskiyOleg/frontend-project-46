@@ -10,26 +10,24 @@ const expectedStylish = readFileSync(getFixturePath('nested-stylish.txt'), 'utf-
 const expectedPlain = readFileSync(getFixturePath('nested-plain.txt'), 'utf-8');
 
 test.each([
-  ['file1.json', 'file2.json', 'stylish', expectedStylish],
-  ['file1.yml', 'file2.yml', 'stylish', expectedStylish],
-  ['file1.json', 'file2.json', 'plain', expectedPlain],
-  ['file1.yml', 'file2.yml', 'plain', expectedPlain],
-])('test(%s, %s, %s)', (file1, file2, format, expected) => {
-  const path1 = getFixturePath(file1);
-  const path2 = getFixturePath(file2);
+  ['.json', 'stylish', expectedStylish],
+  ['.yml', 'stylish', expectedStylish],
+  ['.yaml', 'stylish', expectedStylish],
+  ['.json', 'plain', expectedPlain],
+  ['.yml', 'plain', expectedPlain],
+  ['.yaml', 'plain', expectedPlain],
+])('test(%s, %s)', (extension, format, expected) => {
+  const path1 = getFixturePath(`file1${extension}`);
+  const path2 = getFixturePath(`file2${extension}`);
+
   const actual = gendiff(path1, path2, format);
+  const actual1 = gendiff(path1, path2, 'json');
+
   expect(actual).toEqual(expected);
+  expect(() => JSON.parse(actual1)).not.toThrow();
+  expect(() => gendiff(path1, path2, 'plainn')).toThrow();
 });
 
-test.each([
-  ['file1.json', 'file2.json', 'json'],
-  ['file1.yml', 'file2.yml', 'json'],
-])('test(%s, %s, %s)', (file1, file2, format) => {
-  const path1 = getFixturePath(file1);
-  const path2 = getFixturePath(file2);
-  const actual = gendiff(path1, path2, format);
-  expect(() => JSON.parse(actual)).not.toThrow();
-});
 test('test(unknown format)', () => {
   const path1 = getFixturePath('file1.txt');
   const path2 = getFixturePath('file2.json');

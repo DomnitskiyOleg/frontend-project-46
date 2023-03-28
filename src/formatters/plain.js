@@ -11,24 +11,25 @@ const handleValue = (value) => {
 };
 
 const handleLeaf = (leaf, pathToLeaf) => {
-  const {
-    name, type, value, value1, value2,
-  } = leaf;
+  const { name, type } = leaf;
+  const currentPath = [...pathToLeaf, name].join('.');
 
-  if (type === 'removed') {
-    return `Property '${pathToLeaf}${name}' was ${type}`;
+  switch (type) {
+    case 'removed':
+      return `Property '${currentPath}' was ${type}`;
+    case 'added':
+      return `Property '${currentPath}' was ${type} with value: ${handleValue(
+        leaf.value,
+      )}`;
+    case 'updated':
+      return `Property '${currentPath}' was ${type}. From ${handleValue(
+        leaf.value1,
+      )} to ${handleValue(leaf.value2)}`;
+    case 'unchanged':
+      return [];
+    default:
+      throw new Error(`Unknown type '${type}`);
   }
-  if (type === 'added') {
-    return `Property '${pathToLeaf}${name}' was ${type} with value: ${handleValue(
-      value,
-    )}`;
-  }
-  if (type === 'updated') {
-    return `Property '${pathToLeaf}${name}' was ${type}. From ${handleValue(
-      value1,
-    )} to ${handleValue(value2)}`;
-  }
-  return [];
 };
 
 const getPlainFormat = (diffTree) => {
@@ -36,12 +37,12 @@ const getPlainFormat = (diffTree) => {
     if (!node.children) {
       return handleLeaf(node, pathToCurrent);
     }
-    const pathToNext = `${pathToCurrent}${node.name}.`;
+    const pathToNext = [...pathToCurrent, node.name];
     const result = node.children.map((child) => iter(child, pathToNext));
     return result;
   };
   const plainFormat = _.flattenDeep(
-    diffTree.map((item) => iter(item, '')),
+    diffTree.map((item) => iter(item, [])),
   ).join('\n');
   return plainFormat;
 };

@@ -8,8 +8,10 @@ const formatOutput = (diffData, formatName) => {
       return getPlainFormat(diffData);
     case 'json':
       return getJsonFormat(diffData);
-    default:
+    case 'stylish':
       return getStylishFormat(diffData);
+    default:
+      throw new Error(`Unknown output format '${formatName}`);
   }
 };
 export default formatOutput;

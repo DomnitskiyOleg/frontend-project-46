@@ -4,13 +4,13 @@ const isNested = (value1, value2) => _.isObject(value1) && _.isObject(value2);
 
 const handleValues = (obj1, obj2, key) => {
   if (!_.has(obj1, key)) {
-    return { type: 'added', value: _.cloneDeep(obj2[key]) };
+    return { type: 'added', value: obj2[key] };
   }
   if (!_.has(obj2, key)) {
-    return { type: 'removed', value: _.cloneDeep(obj1[key]) };
+    return { type: 'removed', value: obj1[key] };
   }
   if (obj1[key] === obj2[key]) {
-    return { type: 'unchanged', value: _.cloneDeep(obj1[key]) };
+    return { type: 'unchanged', value: obj1[key] };
   }
   return {
     type: 'updated',
