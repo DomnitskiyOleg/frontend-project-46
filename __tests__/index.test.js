@@ -9,22 +9,18 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const expectedStylish = readFileSync(getFixturePath('nested-stylish.txt'), 'utf-8');
 const expectedPlain = readFileSync(getFixturePath('nested-plain.txt'), 'utf-8');
 
-test.each([
-  ['.json', 'stylish', expectedStylish],
-  ['.yml', 'stylish', expectedStylish],
-  ['.yaml', 'stylish', expectedStylish],
-  ['.json', 'plain', expectedPlain],
-  ['.yml', 'plain', expectedPlain],
-  ['.yaml', 'plain', expectedPlain],
-])('test(%s, %s)', (extension, format, expected) => {
-  const path1 = getFixturePath(`file1${extension}`);
-  const path2 = getFixturePath(`file2${extension}`);
+test.each(['json', 'yml', 'yaml'])('test(%s)', (format) => {
+  const path1 = getFixturePath(`file1.${format}`);
+  const path2 = getFixturePath(`file2.${format}`);
+  const path3 = getFixturePath('file1.txt');
 
-  const actual = gendiff(path1, path2, format);
-  const actual1 = gendiff(path1, path2, 'json');
+  const actual1 = gendiff(path1, path2, 'stylish');
+  const actual2 = gendiff(path1, path2, 'plain');
+  const actual3 = gendiff(path1, path2, 'json');
 
-  expect(actual).toEqual(expected);
-  expect(() => JSON.parse(actual1)).not.toThrow();
+  expect(actual1).toEqual(expectedStylish);
+  expect(actual2).toEqual(expectedPlain);
+  expect(() => JSON.parse(actual3)).not.toThrow();
   expect(() => gendiff(path1, path2, 'wrong format')).toThrow();
-  expect(() => gendiff('file.wrong', path2)).toThrow();
+  expect(() => gendiff(path3, path2)).toThrow();
 });

@@ -1,18 +1,19 @@
-const handleLeaf = (leaf) => {
-  const {
-    name, type, value, value1, value2,
-  } = leaf;
+import _ from 'lodash';
 
-  if (type === 'removed') {
-    return { [`- ${name}`]: value };
+const handleLeaf = (leaf) => {
+  const { name, type } = leaf;
+  switch (type) {
+    case 'removed':
+      return { [`- ${name}`]: leaf.value };
+    case 'added':
+      return { [`+ ${name}`]: leaf.value };
+    case 'updated':
+      return { [`- ${name}`]: leaf.value1, [`+ ${name}`]: leaf.value2 };
+    case 'unchanged':
+      return { [`${name}`]: leaf.value };
+    default:
+      throw new Error(`Unknown type '${type}`);
   }
-  if (type === 'added') {
-    return { [`+ ${name}`]: value };
-  }
-  if (type === 'updated') {
-    return { [`- ${name}`]: value1, [`+ ${name}`]: value2 };
-  }
-  return { [`${name}`]: value };
 };
 
 const isLeaf = (node) => !Array.isArray(node);
@@ -33,20 +34,33 @@ const getObjectFromDiffTree = (node) => {
   return result;
 };
 
+const getAmountOfspaces = (key, spaceCount) => {
+  if (key.startsWith('-') || key.startsWith('+')) {
+    return spaceCount - 2;
+  }
+  return spaceCount;
+};
+
+const stringifyObject = (object) => {
+  const iter = (data, depth, spaceCount = 4, replacer = ' ') => {
+    const stringEntries = Object.entries(data).map(([key, value]) => {
+      const actualSpaceCount = getAmountOfspaces(key, spaceCount * depth);
+
+      if (_.isObject(value)) {
+        return `${replacer.repeat(actualSpaceCount)}${key}: ${iter(value, depth + 1)}`;
+      }
+      return `${replacer.repeat(actualSpaceCount)}${key}: ${value}`;
+    });
+    return ['{', ...stringEntries, `${replacer.repeat(depth * spaceCount - spaceCount)}}`].join('\n');
+  };
+  return iter(object, 1);
+};
+
 const getStylishFormat = (diffTree) => {
   const diffObject = getObjectFromDiffTree(diffTree);
-
-  const formattedDiff = JSON.stringify(diffObject, null, 4)
-    .replace(/[",]/g, '')
-    .split('\n')
-    .map((item) => {
-      if (item.includes('-') || item.includes('+')) {
-        return item.slice(2);
-      }
-      return item;
-    })
-    .join('\n');
+  const formattedDiff = stringifyObject(diffObject);
 
   return formattedDiff;
 };
+
 export default getStylishFormat;
