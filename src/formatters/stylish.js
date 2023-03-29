@@ -34,7 +34,7 @@ const getObjectFromDiffTree = (node) => {
   return result;
 };
 
-const getAmountOfspaces = (key, spaceCount) => {
+const getAmountOfspacesForKey = (key, spaceCount) => {
   if (key.startsWith('-') || key.startsWith('+')) {
     return spaceCount - 2;
   }
@@ -44,7 +44,7 @@ const getAmountOfspaces = (key, spaceCount) => {
 const stringifyObject = (object) => {
   const iter = (data, depth, spaceCount = 4, replacer = ' ') => {
     const stringEntries = Object.entries(data).map(([key, value]) => {
-      const actualSpaceCount = getAmountOfspaces(key, spaceCount * depth);
+      const actualSpaceCount = getAmountOfspacesForKey(key, spaceCount * depth);
 
       if (_.isObject(value)) {
         return `${replacer.repeat(actualSpaceCount)}${key}: ${iter(value, depth + 1)}`;
