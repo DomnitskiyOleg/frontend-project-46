@@ -43,14 +43,16 @@ const getAmountOfspacesForKey = (key, spaceCount) => {
 
 const stringifyObject = (object) => {
   const iter = (data, depth, spaceCount = 4, replacer = ' ') => {
-    const stringEntries = Object.entries(data).map(([key, value]) => {
-      const actualSpaceCount = getAmountOfspacesForKey(key, spaceCount * depth);
+    const stringEntries = Object.entries(data)
+      .map(([key, value]) => {
+        const actualSpaceCount = getAmountOfspacesForKey(key, spaceCount * depth);
 
-      if (_.isObject(value)) {
-        return `${replacer.repeat(actualSpaceCount)}${key}: ${iter(value, depth + 1)}`;
-      }
-      return `${replacer.repeat(actualSpaceCount)}${key}: ${value}`;
-    });
+        if (_.isObject(value)) {
+          return `${replacer.repeat(actualSpaceCount)}${key}: ${iter(value, depth + 1)}`;
+        }
+        return `${replacer.repeat(actualSpaceCount)}${key}: ${value}`;
+      });
+
     return ['{', ...stringEntries, `${replacer.repeat(depth * spaceCount - spaceCount)}}`].join('\n');
   };
   return iter(object, 1);
