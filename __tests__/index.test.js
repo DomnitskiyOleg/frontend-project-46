@@ -17,8 +17,10 @@ test.each(['json', 'yml', 'yaml'])('test(%s)', (format) => {
   const actual1 = gendiff(path1, path2, 'stylish');
   const actual2 = gendiff(path1, path2, 'plain');
   const actual3 = gendiff(path1, path2, 'json');
+  const actual4 = gendiff(path1, path2);
 
   expect(actual1).toEqual(expectedStylish);
+  expect(actual4).toEqual(expectedStylish);
   expect(actual2).toEqual(expectedPlain);
   expect(() => JSON.parse(actual3)).not.toThrow();
   expect(() => gendiff(path1, path2, 'wrong format')).toThrow();
