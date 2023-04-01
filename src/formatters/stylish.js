@@ -1,68 +1,96 @@
 import _ from 'lodash';
 
-const handleLeaf = (leaf) => {
-  const { name, type } = leaf;
-  switch (type) {
-    case 'removed':
-      return { [`- ${name}`]: leaf.value };
-    case 'added':
-      return { [`+ ${name}`]: leaf.value };
-    case 'updated':
-      return { [`- ${name}`]: leaf.value1, [`+ ${name}`]: leaf.value2 };
-    case 'unchanged':
-      return { [`${name}`]: leaf.value };
-    default:
-      throw new Error(`Unknown type '${type}`);
+const stringify = (data, depth, spaceCount = 4, replacer = ' ') => {
+  if (!_.isObject(data)) {
+    return String(data);
   }
-};
+  const stringEntries = Object.entries(data).map(([key, value]) => {
+    const actualSpaceCount = spaceCount * depth;
 
-const isLeaf = (node) => !Array.isArray(node);
-
-const getObjectFromDiffTree = (node) => {
-  if (isLeaf(node)) {
-    return handleLeaf(node);
-  }
-
-  const result = node.reduce((acc, item) => {
-    if (item.children) {
-      const { name, children } = item;
-      return { ...acc, [`${name}`]: getObjectFromDiffTree(children) };
+    if (_.isObject(value)) {
+      return `${replacer.repeat(actualSpaceCount)}${key}: ${stringify(
+        value,
+        depth + 1,
+      )}`;
     }
-    return { ...acc, ...getObjectFromDiffTree(item) };
-  }, {});
-
-  return result;
-};
-
-const getAmountOfspacesForKey = (key, spaceCount) => {
-  if (key.startsWith('-') || key.startsWith('+')) {
-    return spaceCount - 2;
-  }
-  return spaceCount;
-};
-
-const stringifyObject = (object) => {
-  const iter = (data, depth, spaceCount = 4, replacer = ' ') => {
-    const stringEntries = Object.entries(data)
-      .map(([key, value]) => {
-        const actualSpaceCount = getAmountOfspacesForKey(key, spaceCount * depth);
-
-        if (_.isObject(value)) {
-          return `${replacer.repeat(actualSpaceCount)}${key}: ${iter(value, depth + 1)}`;
-        }
-        return `${replacer.repeat(actualSpaceCount)}${key}: ${value}`;
-      });
-
-    return ['{', ...stringEntries, `${replacer.repeat(depth * spaceCount - spaceCount)}}`].join('\n');
-  };
-  return iter(object, 1);
+    return `${replacer.repeat(actualSpaceCount)}${key}: ${value}`;
+  });
+  return [
+    '{',
+    ...stringEntries,
+    `${replacer.repeat(depth * spaceCount - spaceCount)}}`,
+  ].join('\n');
 };
 
 const getStylishFormat = (diffTree) => {
-  const diffObject = getObjectFromDiffTree(diffTree);
-  const formattedDiff = stringifyObject(diffObject);
+  const iter = (node, depth, spaceCount = 4, replacer = ' ') => {
+    if (!_.isArray(node)) {
+      const { name, type } = node;
+      switch (node.type) {
+        case 'removed':
+          return `${replacer.repeat(
+            spaceCount * depth - 2,
+          )}- ${name}: ${stringify(
+            node.value,
+            depth + 1,
+            spaceCount,
+            replacer,
+          )}`;
 
-  return formattedDiff;
+        case 'added':
+          return `${replacer.repeat(
+            spaceCount * depth - 2,
+          )}+ ${name}: ${stringify(
+            node.value,
+            depth + 1,
+            spaceCount,
+            replacer,
+          )}`;
+
+        case 'unchanged':
+          return `${replacer.repeat(spaceCount * depth)}${name}: ${stringify(
+            node.value,
+            depth + 1,
+            spaceCount,
+            replacer,
+          )}`;
+
+        case 'updated':
+          return [
+            `${replacer.repeat(spaceCount * depth - 2)}- ${name}: ${stringify(
+              node.value1,
+              depth + 1,
+              spaceCount,
+              replacer,
+            )}`,
+            `${replacer.repeat(spaceCount * depth - 2)}+ ${name}: ${stringify(
+              node.value2,
+              depth + 1,
+              spaceCount,
+              replacer,
+            )}`,
+          ].join('\n');
+        default:
+          throw new Error(`Unknown type '${type}`);
+      }
+    }
+    const result = node.map((item) => {
+      if (item.type === 'nested') {
+        const { children } = item;
+        return `${replacer.repeat(spaceCount * depth)}${item.name}: ${iter(
+          children,
+          depth + 1,
+        )}`;
+      }
+      return iter(item, depth);
+    });
+    return [
+      '{',
+      ...result,
+      `${replacer.repeat(depth * spaceCount - spaceCount)}}`,
+    ].join('\n');
+  };
+  return iter(diffTree, 1);
 };
 
 export default getStylishFormat;

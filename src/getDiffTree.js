@@ -2,23 +2,6 @@ import _ from 'lodash';
 
 const isNested = (value1, value2) => _.isObject(value1) && _.isObject(value2);
 
-const handleValues = (obj1, obj2, key) => {
-  if (!_.has(obj1, key)) {
-    return { type: 'added', value: obj2[key] };
-  }
-  if (!_.has(obj2, key)) {
-    return { type: 'removed', value: obj1[key] };
-  }
-  if (obj1[key] === obj2[key]) {
-    return { type: 'unchanged', value: obj1[key] };
-  }
-  return {
-    type: 'updated',
-    value1: _.cloneDeep(obj1[key]),
-    value2: _.cloneDeep(obj2[key]),
-  };
-};
-
 const getDiffTree = (data1, data2) => {
   const keys = _.sortBy(_.union(Object.keys(data1), Object.keys(data2)));
   const diffTree = keys.map((key) => {
@@ -29,7 +12,21 @@ const getDiffTree = (data1, data2) => {
         type: 'nested',
       };
     }
-    return { name: key, ...handleValues(data1, data2, key) };
+    if (!_.has(data1, key)) {
+      return { name: key, type: 'added', value: data2[key] };
+    }
+    if (!_.has(data2, key)) {
+      return { name: key, type: 'removed', value: data1[key] };
+    }
+    if (data1[key] === data2[key]) {
+      return { name: key, type: 'unchanged', value: data1[key] };
+    }
+    return {
+      name: key,
+      type: 'updated',
+      value1: data1[key],
+      value2: data2[key],
+    };
   });
   return diffTree;
 };
