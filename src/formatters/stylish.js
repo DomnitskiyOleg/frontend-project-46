@@ -21,7 +21,7 @@ const getStylishFormat = (diffTree) => {
   const iter = (node, depth, spaceCount = 4) => {
     if (!_.isArray(node)) {
       const { name, type } = node;
-      switch (node.type) {
+      switch (type) {
         case 'removed':
           return `${getSpace(spaceCount * depth - 2)}- ${name}: ${stringify(node.value, depth + 1)}`;
         case 'added':
