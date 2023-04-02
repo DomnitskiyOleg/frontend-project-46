@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getSpacePlusSymbols = (count, symbols = '') => `${' '.repeat(count)}${symbols}`;
+const getSpace = (count) => ' '.repeat(count);
 
 const stringify = (data, depth, spaceCount = 4) => {
   if (!_.isObject(data)) {
@@ -10,14 +10,11 @@ const stringify = (data, depth, spaceCount = 4) => {
     const actualSpaceCount = spaceCount * depth;
 
     if (_.isObject(value)) {
-      return `${getSpacePlusSymbols(actualSpaceCount)}${key}: ${stringify(
-        value,
-        depth + 1,
-      )}`;
+      return `${getSpace(actualSpaceCount)}${key}: ${stringify(value, depth + 1)}`;
     }
-    return `${getSpacePlusSymbols(actualSpaceCount)}${key}: ${value}`;
+    return `${getSpace(actualSpaceCount)}${key}: ${value}`;
   });
-  return ['{', ...stringEntries, `${getSpacePlusSymbols(depth * spaceCount - spaceCount)}}`].join('\n');
+  return ['{', ...stringEntries, `${getSpace(depth * spaceCount - spaceCount)}}`].join('\n');
 };
 
 const getStylishFormat = (diffTree) => {
@@ -26,15 +23,15 @@ const getStylishFormat = (diffTree) => {
       const { name, type } = node;
       switch (node.type) {
         case 'removed':
-          return `${getSpacePlusSymbols(spaceCount * depth - 2, '- ')}${name}: ${stringify(node.value, depth + 1)}`;
+          return `${getSpace(spaceCount * depth - 2)}- ${name}: ${stringify(node.value, depth + 1)}`;
         case 'added':
-          return `${getSpacePlusSymbols(spaceCount * depth - 2, '+ ')}${name}: ${stringify(node.value, depth + 1)}`;
+          return `${getSpace(spaceCount * depth - 2)}+ ${name}: ${stringify(node.value, depth + 1)}`;
         case 'unchanged':
-          return `${getSpacePlusSymbols(spaceCount * depth)}${name}: ${stringify(node.value, depth + 1)}`;
+          return `${getSpace(spaceCount * depth)}${name}: ${stringify(node.value, depth + 1)}`;
         case 'updated':
           return [
-            `${getSpacePlusSymbols(spaceCount * depth - 2, '- ')}${name}: ${stringify(node.value1, depth + 1)}`,
-            `${getSpacePlusSymbols(spaceCount * depth - 2, '+ ')}${name}: ${stringify(node.value2, depth + 1)}`].join('\n');
+            `${getSpace(spaceCount * depth - 2)}- ${name}: ${stringify(node.value1, depth + 1)}`,
+            `${getSpace(spaceCount * depth - 2)}+ ${name}: ${stringify(node.value2, depth + 1)}`].join('\n');
         default:
           throw new Error(`Unknown type '${type}`);
       }
@@ -42,11 +39,11 @@ const getStylishFormat = (diffTree) => {
     const result = node.map((item) => {
       if (item.type === 'nested') {
         const { children } = item;
-        return `${getSpacePlusSymbols(spaceCount * depth)}${item.name}: ${iter(children, depth + 1)}`;
+        return `${getSpace(spaceCount * depth)}${item.name}: ${iter(children, depth + 1)}`;
       }
       return iter(item, depth);
     });
-    return ['{', ...result, `${getSpacePlusSymbols(depth * spaceCount - spaceCount)}}`].join('\n');
+    return ['{', ...result, `${getSpace(depth * spaceCount - spaceCount)}}`].join('\n');
   };
   return iter(diffTree, 1);
 };
