@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 const getIndent = (depth, spaceCount = 4) => ' '.repeat(depth * spaceCount + 2);
+const getBracketIndent = (depth, spaceCount = 4) => ' '.repeat(depth * spaceCount);
 
 const stringify = (data, depth) => {
   if (!_.isObject(data)) {
@@ -12,7 +13,7 @@ const stringify = (data, depth) => {
     }
     return `${getIndent(depth)}  ${key}: ${value}`;
   });
-  return ['{', ...stringEntries, `${getIndent(depth).slice(2)}}`].join('\n');
+  return ['{', ...stringEntries, `${getBracketIndent(depth)}}`].join('\n');
 };
 
 const getStylishFormat = (diffTree) => {
@@ -41,7 +42,7 @@ const getStylishFormat = (diffTree) => {
       }
       return iter(item, depth);
     });
-    return ['{', ...result, `${getIndent(depth).slice(2)}}`].join('\n');
+    return ['{', ...result, `${getBracketIndent(depth)}}`].join('\n');
   };
   return iter(diffTree, 0);
 };
