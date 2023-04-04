@@ -10,41 +10,34 @@ const handleValue = (value) => {
   return String(value);
 };
 
-const handleLeaf = (leaf, pathToLeaf) => {
-  const { name, type } = leaf;
-  const currentPath = [...pathToLeaf, name].join('.');
-
-  switch (type) {
-    case 'removed':
-      return `Property '${currentPath}' was ${type}`;
-    case 'added':
-      return `Property '${currentPath}' was ${type} with value: ${handleValue(
-        leaf.value,
-      )}`;
-    case 'updated':
-      return `Property '${currentPath}' was ${type}. From ${handleValue(
-        leaf.value1,
-      )} to ${handleValue(leaf.value2)}`;
-    case 'unchanged':
-      return [];
-    default:
-      throw new Error(`Unknown type '${type}`);
-  }
-};
-
 const getPlainFormat = (diffTree) => {
   const iter = (node, pathToCurrent) => {
-    if (!node.children) {
-      return handleLeaf(node, pathToCurrent);
-    }
-    const pathToNext = [...pathToCurrent, node.name];
-    const result = node.children.map((child) => iter(child, pathToNext));
-    return result;
+    const plainFormat = node
+      .map((item) => {
+        const { name, type } = item;
+        const pathToNext = [...pathToCurrent, name];
+        const currentPath = pathToNext.join('.');
+
+        switch (type) {
+          case 'removed':
+            return `Property '${currentPath}' was ${type}`;
+          case 'added':
+            return `Property '${currentPath}' was ${type} with value: ${handleValue(item.value)}`;
+          case 'updated':
+            return `Property '${currentPath}' was ${type}. From ${handleValue(item.value1)} to ${handleValue(item.value2)}`;
+          case 'unchanged':
+            return [];
+          case 'nested':
+            return iter(item.children, pathToNext);
+          default:
+            throw new Error(`Unknown type '${type}`);
+        }
+      });
+
+    return _.flattenDeep(plainFormat).join('\n');
   };
-  const plainFormat = _.flattenDeep(
-    diffTree.map((item) => iter(item, [])),
-  ).join('\n');
-  return plainFormat;
+
+  return iter(diffTree, []);
 };
 
 export default getPlainFormat;

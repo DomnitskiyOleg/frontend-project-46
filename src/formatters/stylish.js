@@ -18,31 +18,27 @@ const stringify = (data, depth) => {
 
 const getStylishFormat = (diffTree) => {
   const iter = (node, depth) => {
-    if (!_.isArray(node)) {
-      const { name, type } = node;
+    const stylish = node.map((item) => {
+      const { name, type } = item;
+
       switch (type) {
         case 'removed':
-          return `${getIndent(depth)}- ${name}: ${stringify(node.value, depth + 1)}`;
+          return `${getIndent(depth)}- ${name}: ${stringify(item.value, depth + 1)}`;
         case 'added':
-          return `${getIndent(depth)}+ ${name}: ${stringify(node.value, depth + 1)}`;
+          return `${getIndent(depth)}+ ${name}: ${stringify(item.value, depth + 1)}`;
         case 'unchanged':
-          return `${getIndent(depth)}  ${name}: ${stringify(node.value, depth + 1)}`;
+          return `${getIndent(depth)}  ${name}: ${stringify(item.value, depth + 1)}`;
         case 'updated':
           return [
-            `${getIndent(depth)}- ${name}: ${stringify(node.value1, depth + 1)}`,
-            `${getIndent(depth)}+ ${name}: ${stringify(node.value2, depth + 1)}`].join('\n');
+            `${getIndent(depth)}- ${name}: ${stringify(item.value1, depth + 1)}`,
+            `${getIndent(depth)}+ ${name}: ${stringify(item.value2, depth + 1)}`].join('\n');
+        case 'nested':
+          return `${getIndent(depth)}  ${item.name}: ${iter(item.children, depth + 1)}`;
         default:
           throw new Error(`Unknown type '${type}`);
       }
-    }
-    const result = node.map((item) => {
-      if (item.type === 'nested') {
-        const { children } = item;
-        return `${getIndent(depth)}  ${item.name}: ${iter(children, depth + 1)}`;
-      }
-      return iter(item, depth);
     });
-    return ['{', ...result, `${getBracketIndent(depth)}}`].join('\n');
+    return ['{', ...stylish, `${getBracketIndent(depth)}}`].join('\n');
   };
   return iter(diffTree, 0);
 };
